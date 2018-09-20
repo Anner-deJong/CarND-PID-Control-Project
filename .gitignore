@@ -1,5 +1,6 @@
 # added by Anner
 src/*.swp
+src/*udacity_old*
 
 # added by Anner for Sublime text
 *sublime*
