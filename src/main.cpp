@@ -32,7 +32,12 @@ int main()
 {
   uWS::Hub h;
 
-  PID pid;
+  // hyperparameters. Set these up manually or with twiddle
+  double Kp = 0.5;
+  double Ki = 0;
+  double Kd = 18;
+
+  PID pid(Kp, Ki, Kd);
   // TODO: Initialize the pid variable.
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -50,7 +55,14 @@ int main()
           double cte = std::stod(j[1]["cte"].get<std::string>());
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-          double steer_value;
+          double throttle = std::stod(j[1]["throttle"].get<std::string>());
+          // std::cout << "JSON: " << j[1] << std::endl;
+
+          // making sure steer value is within boundaries
+          double control = pid.getControl(cte);
+          if (control < -1) {control = -1;}
+          else if (control > 1) {control = 1;}
+          double steer_value = control;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
