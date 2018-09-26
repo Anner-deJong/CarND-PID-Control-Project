@@ -12,9 +12,10 @@ public:
   virtual ~TWIDDLE();
 
   // member functions
-  void init(std::vector<double> prior_params);
-  std::vector<double> run();
-  double dummy_cte_function(std::vector<double> params);
+  void init(std::vector<double> &prior_params);
+  void run(std::vector<double> &prior_params, double (*f)(const std::vector<double> &));
+  std::vector<double> run(double (*f)(const std::vector<double> &));
+  double dummy_cte_function(const std::vector<double> &params);
 
 private:
 

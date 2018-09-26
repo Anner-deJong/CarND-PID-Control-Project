@@ -1,12 +1,14 @@
 #ifndef PID_H
 #define PID_H
 
+#include <vector>
+
 class PID {
 
 public:
 
 // ctor + dtor
-  PID(double Kp, double Ki, double Kd);
+  PID(std::vector<double> params);
   virtual ~PID();
 
   // member functions

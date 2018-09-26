@@ -13,7 +13,7 @@ TWIDDLE::TWIDDLE(double new_tolerance) {
 TWIDDLE::~TWIDDLE() {}
 
 // init function, not necessary, only if prior params are known
-void TWIDDLE::init(std::vector<double> prior_params) {
+void TWIDDLE::init(std::vector<double> &prior_params) {
   if (prior_params.size() != 3) {
     std::cout << "Unable to set params (size 3) to prior_params (size " << prior_params.size() << ")" << std::endl;
   }
@@ -22,16 +22,16 @@ void TWIDDLE::init(std::vector<double> prior_params) {
   }
 }
 
-std::vector<double> TWIDDLE::run() {
+void TWIDDLE::run(std::vector<double> &prior_params, double (*err_func)(const std::vector<double> &)) {
 
   best_err = 2;
 
   while (d_params[0] + d_params[1] + d_params[2] > tolerance) {
-    for (int i=0; i<params.size(); ++i) {
+    for (int i=0; i<prior_params.size(); ++i) {
 
       // increasing params[i]
-      params[i] += d_params[i];
-      cur_err = 2; //myFUNC(params);
+      prior_params[i] += d_params[i];
+      cur_err = err_func(prior_params);
       if (cur_err < best_err) {
         best_err = cur_err;
         d_params[i] *= 1.1;
@@ -39,8 +39,8 @@ std::vector<double> TWIDDLE::run() {
 
       else {
         // decreasing params[i]
-        params[i] -= 2 * d_params[i];
-        cur_err = 2; //myFUNC(params);
+        prior_params[i] -= 2 * d_params[i];
+        cur_err = err_func(prior_params);
         if (cur_err < best_err) {
           best_err = cur_err;
           d_params[i] *= 1.1;
@@ -48,16 +48,19 @@ std::vector<double> TWIDDLE::run() {
 
         // neither, reset params[i] and decrease d_params[i]
         else {
-          params[i] += d_params[i];
+          prior_params[i] += d_params[i];
           d_params[i] *= 0.9;
         }
       }
     }
   }
+}
 
+std::vector<double> TWIDDLE::run(double (*err_func)(const std::vector<double> &)) {
+  TWIDDLE::run(params, err_func);
   return params;
 }
 
-double TWIDDLE::dummy_cte_function(std::vector<double> params) {
-  return 2;
+double TWIDDLE::dummy_cte_function(const std::vector<double> &params) {
+  return 1;
 }
