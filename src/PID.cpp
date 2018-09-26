@@ -1,6 +1,5 @@
 #include "PID.h"
 #include <iostream>
-// #include "Eigen/Dense"
 
 
 // Constructor
@@ -36,6 +35,3 @@ double PID::getControl(double cte) {
   return control;
 }
 
-void PID::MyFunction(const std::vector<int> &MyVector) {
-
-}

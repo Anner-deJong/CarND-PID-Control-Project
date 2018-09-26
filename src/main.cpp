@@ -2,7 +2,9 @@
 #include <iostream>
 #include "json.hpp"
 #include "PID.h"
+#include "twiddle.h"
 #include <math.h>
+#include <vector>
 
 // for convenience
 using json = nlohmann::json;
@@ -38,6 +40,13 @@ int main()
   double Kd = 18;
 
   PID pid(Kp, Ki, Kd);
+
+  // set up twiddle
+  double tolerance = 0.01;
+  TWIDDLE twiddle(tolerance);
+
+  twiddle.init({Kp, Ki, Kd});
+  // std::vector<double> = twiddle.run();
   // TODO: Initialize the pid variable.
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {

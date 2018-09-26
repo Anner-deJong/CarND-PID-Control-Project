@@ -1,9 +1,6 @@
 #ifndef PID_H
 #define PID_H
 
-#include <vector>
-
-
 class PID {
 
 public:
@@ -30,10 +27,6 @@ private:
   double cte_prev;
   double cte_d;
   double cte_i;
-
-  // member functions
-  void MyFunction(const std::vector<int> &MyVector);
-
 
 };
 
