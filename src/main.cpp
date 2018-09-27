@@ -30,11 +30,6 @@ std::string hasData(std::string s) {
   return "";
 }
 
-// dummy function to set up twiddle
-double dummy_cte_function(const std::vector<double> &params) {
-  return 1;
-}
-
 
 int main()
 {
@@ -43,21 +38,18 @@ int main()
   /******* set up the PID controller gains *******/
   // hyperparameters. Set these up manually or with twiddle
   double Kp = 0.5;
-  double Ki = 0;
+  double Ki = 0.001;
   double Kd = 18;
   std::vector<double> params = {Kp, Ki, Kd};
 
   /******* run twiddle on the parameters *******/
   double tolerance = 0.01;
   TWIDDLE twiddle(tolerance);
-
-  twiddle.run(params, TWIDDLE::dummy_cte_function); // with prior param initialization
+  twiddle.run(params, &dummy_cte_function); // with prior param initialization
   // params = twiddle.run(&dummy_cte_function); // without prior param initialization
 
   /******* initialize a PID filter with the adjusted filter params *******/
   PID pid(params);
-
-  std::cout << "params[0]: " << params[0] << std::endl;
   
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {

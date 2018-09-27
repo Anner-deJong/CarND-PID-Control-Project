@@ -12,6 +12,7 @@ TWIDDLE::TWIDDLE(double new_tolerance) {
 //destructor
 TWIDDLE::~TWIDDLE() {}
 
+// depreciated
 // init function, not necessary, only if prior params are known
 void TWIDDLE::init(std::vector<double> &prior_params) {
   if (prior_params.size() != 3) {
@@ -22,6 +23,7 @@ void TWIDDLE::init(std::vector<double> &prior_params) {
   }
 }
 
+// main functionality
 void TWIDDLE::run(std::vector<double> &prior_params, double (*err_func)(const std::vector<double> &)) {
 
   best_err = 2;
@@ -56,11 +58,13 @@ void TWIDDLE::run(std::vector<double> &prior_params, double (*err_func)(const st
   }
 }
 
+// templates
 std::vector<double> TWIDDLE::run(double (*err_func)(const std::vector<double> &)) {
   TWIDDLE::run(params, err_func);
   return params;
 }
 
-double TWIDDLE::dummy_cte_function(const std::vector<double> &params) {
+
+double dummy_cte_function(const std::vector<double> &params) {
   return 1;
 }

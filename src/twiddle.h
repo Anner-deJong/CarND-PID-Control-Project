@@ -15,7 +15,7 @@ public:
   void init(std::vector<double> &prior_params);
   void run(std::vector<double> &prior_params, double (*f)(const std::vector<double> &));
   std::vector<double> run(double (*f)(const std::vector<double> &));
-  double dummy_cte_function(const std::vector<double> &params);
+  
 
 private:
 
@@ -27,6 +27,9 @@ private:
   double cur_err;
 
 };
+
+
+double dummy_cte_function(const std::vector<double> &params);
 
 
 #endif
