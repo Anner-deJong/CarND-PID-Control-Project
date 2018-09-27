@@ -12,7 +12,7 @@ public:
   virtual ~PID();
 
   // member functions
-  double getControl(double cte);
+  double getControl(double err);
   
 private:
 
@@ -20,15 +20,15 @@ private:
   bool init;
   double control;
 
-  // controller coefficients
+  // controller gains
   const double Kp;
   const double Ki;
   const double Kd;
 
   // keeping track of various cte related properties
-  double cte_prev;
-  double cte_d;
-  double cte_i;
+  double err_prev;
+  double err_d;
+  double err_i;
 
 };
 

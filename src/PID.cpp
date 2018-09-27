@@ -7,7 +7,7 @@ PID::PID(std::vector<double> params):
 Kp(params[0]),
 Ki(params[1]),
 Kd(params[2]),
-cte_i(0),
+err_i(0),
 init(false)
 {}
 
@@ -16,21 +16,21 @@ PID::~PID() {}
 
 
 
-double PID::getControl(double cte) {
+double PID::getControl(double err) {
   if (!init) {
-    cte_prev = cte;
+    err_prev = err;
     init = true;
   }
 
-  // get difference 
-  cte_d = (cte - cte_prev);  // timestep
-  cte_i += cte; // * timestep
+  // get difference (no timestep information available)
+  err_d = (err - err_prev);  // / timestep
+  err_i += err; // * timestep
 
   // calculate control variable
-  control = -Kp * cte -Kd * cte_d -Ki * cte_i;
+  control = -Kp * err -Kd * err_d -Ki * err_i;
   
   // update previous cte value      
-  cte_prev = cte;
+  err_prev = err;
 
   return control;
 }

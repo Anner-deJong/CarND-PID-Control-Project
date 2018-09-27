@@ -26,7 +26,7 @@ void TWIDDLE::init(std::vector<double> &prior_params) {
 // main functionality
 void TWIDDLE::run(std::vector<double> &prior_params, double (*err_func)(const std::vector<double> &)) {
 
-  best_err = 2;
+  best_err = err_func(prior_params);
 
   while (d_params[0] + d_params[1] + d_params[2] > tolerance) {
     for (int i=0; i<prior_params.size(); ++i) {
