@@ -13,7 +13,7 @@ public:
 
   // member functions
   void init(std::vector<double> &prior_params);
-  void run(std::vector<double> &prior_params, double (*f)(const std::vector<double> &));
+  void run(std::vector<double> &prior_params, double (*err_func)(const std::vector<double> &));
   std::vector<double> run(double (*f)(const std::vector<double> &));
   
 

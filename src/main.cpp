@@ -50,6 +50,7 @@ int main()
   PID steer_pid(params);
 
   /******* set up a throttle PID controller to control the speed *******/
+  // double Kp_th = 0.05; double Ki_th = 0; double Kd_th = 0.5;
   PID throttle_pid({0.05, 0, 0.5});
 
   h.onMessage([&steer_pid, &throttle_pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -67,8 +68,7 @@ int main()
           double cte = std::stod(j[1]["cte"].get<std::string>());
           double speed = std::stod(j[1]["speed"].get<std::string>());
           // double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-          double throttle = std::stod(j[1]["throttle"].get<std::string>());
-          // std::cout << "JSON: " << j[1] << std::endl;
+          // double throttle = std::stod(j[1]["throttle"].get<std::string>());
 
           // getting control commands from the pid controllers
           double steer_control = steer_pid.getControl(cte);
@@ -76,8 +76,6 @@ int main()
           else if (steer_control > 1) {steer_control = 1;}
           
           double throttle_control = throttle_pid.getControl(cte*speed);
-
-          std::cout << "CTE: " << cte << ", Throttle Control: " << throttle_control << " Steering Control: " << steer_control << ", Throttle: " << throttle << std::endl;
           throttle_control = std::max(-1., 1 - std::abs(throttle_control));
 
           /*
@@ -88,6 +86,7 @@ int main()
           */
           
           // DEBUG
+          // std::cout << "CTE: " << cte << ", Throttle Control: " << throttle_control << " Steering Control: " << steer_control << ", Throttle: " << throttle << std::endl;
 
           json msgJson;
           msgJson["steering_angle"] = steer_control;
