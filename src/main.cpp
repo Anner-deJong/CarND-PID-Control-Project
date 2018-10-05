@@ -5,6 +5,7 @@
 #include "twiddle.h"
 #include <math.h>
 #include <vector>
+#include <array>
 
 // for convenience
 using json = nlohmann::json;
@@ -30,28 +31,45 @@ std::string hasData(std::string s) {
   return "";
 }
 
+namespace {
+
+  // hyperparameter gains. Set these up manually or with twiddle
+  constexpr double STEER_KP = 0.5;
+  constexpr double STEER_KI = 0.0;
+  constexpr double STEER_KD = 15.;
+  constexpr double THROTTLE_KP = 0.05;
+  constexpr double THROTTLE_KI = 0.0;
+  constexpr double THROTTLE_KD = .5;
+
+  // hyperparameter tolerance for twiddle
+  constexpr double TOLERANCE = 0.01;
+
+  double dummy_cte_function(const std::array<double, 3> &params) {
+    return 1;
+  }
+
+
+}
 
 int main()
 {
   uWS::Hub h;
 
+  /***************************************************/
   /******* set up the steering PID controller  *******/
-  // hyperparameter gains. Set these up manually or with twiddle
-  double Kp = 0.5; double Ki = 0; double Kd = 15;
-  std::vector<double> params = {Kp, Ki, Kd};
+  std::array<double, 3> pid_steer_params = {{STEER_KP, STEER_KI, STEER_KD}};
 
   // if error function is available, twiddle could be used to find optimal params
-  double tolerance = 0.01;
-  TWIDDLE twiddle(tolerance);
-  twiddle.run(params, &dummy_cte_function); // with prior param initialization
+  TWIDDLE twiddle(TOLERANCE);
+  twiddle.run(pid_steer_params, &dummy_cte_function); // with prior param initialization
   // params = twiddle.run(&dummy_cte_function); // without prior param initialization
-
+  
   // Actually create the PID controller instance
-  PID steer_pid(params);
+  PID steer_pid(pid_steer_params);
 
+  /*********************************************************************/
   /******* set up a throttle PID controller to control the speed *******/
-  // double Kp_th = 0.05; double Ki_th = 0; double Kd_th = 0.5;
-  PID throttle_pid({0.05, 0, 0.5});
+  PID throttle_pid(std::array<double, 3> {{THROTTLE_KP, THROTTLE_KI, THROTTLE_KD}});
 
   h.onMessage([&steer_pid, &throttle_pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.

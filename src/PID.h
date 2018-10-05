@@ -2,13 +2,14 @@
 #define PID_H
 
 #include <vector>
+#include <array>
 
 class PID {
 
 public:
 
 // ctor + dtor
-  PID(std::vector<double> params);
+  PID(std::array<double, 3> gains);
   virtual ~PID();
 
   // member functions

@@ -3,10 +3,10 @@
 
 
 // Constructor
-PID::PID(std::vector<double> params):
-Kp(params[0]),
-Ki(params[1]),
-Kd(params[2]),
+PID::PID(std::array<double, 3> gains):
+Kp(gains[0]),
+Ki(gains[1]),
+Kd(gains[2]),
 err_i(0),
 init(false)
 {}

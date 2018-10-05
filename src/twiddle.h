@@ -2,6 +2,8 @@
 #define TWIDDLE_H
 
 #include <vector>
+#include <array>
+#include <functional>
 
 class TWIDDLE {
 
@@ -12,24 +14,21 @@ public:
   virtual ~TWIDDLE();
 
   // member functions
-  void init(std::vector<double> &prior_params);
-  void run(std::vector<double> &prior_params, double (*err_func)(const std::vector<double> &));
-  std::vector<double> run(double (*f)(const std::vector<double> &));
+  void init(std::array<double, 3> &prior_params);
+  // void run(std::array<double, 3> &prior_params, double (*err_func)(const std::array<double, 3> &));
+  void run(std::array<double, 3> &prior_params, std::function<double(const std::array<double, 3> &)> err_func);
+  std::array<double, 3> run(double (*f)(const std::array<double, 3> &));
   
 
 private:
 
   //member variables
   double tolerance;
-  std::vector<double> params;
-  std::vector<double> d_params;
+  std::array<double, 3> params;
+  std::array<double, 3> d_params;
   double best_err;
   double cur_err;
 
 };
-
-
-double dummy_cte_function(const std::vector<double> &params);
-
 
 #endif
